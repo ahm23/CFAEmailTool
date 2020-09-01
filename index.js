@@ -1,7 +1,4 @@
 const fs = require('fs');
-
-const threshold = 0.1;
-
 new Promise((resolve, reject) => {
     fs.readdir("./CSV", function(error, filenames) {
       if (error) return reject(error);
@@ -9,10 +6,8 @@ new Promise((resolve, reject) => {
     });
 }).then(files => {
     const csvs = files.map(file => {
-      // read content of csv file
         return fs.readFileSync("./CSV/" + file, `utf8`).split(`\n`);
     });
-    // content arrays
     return Promise.resolve(csvs);
 }).then(async csvs => {
     await asyncForEach(csvs, async (csv) => {
@@ -37,15 +32,11 @@ new Promise((resolve, reject) => {
         });
     });
 });
-
-const waitFor = (ms) => new Promise(r => setTimeout(r, ms));
-
 async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
       await callback(array[index], index, array);
     }
 }
-
 const generateCSV = (inputDat) => new Promise((resolve, reject) => {
     var lineArray = [];
     inputDat.forEach(function (infoArray, index) {
